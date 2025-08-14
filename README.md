@@ -1,5 +1,5 @@
 # Dictionary Back
-Back end do projeto Dictionary. Decidi usar NestJS para agilizar o desenvolvimento.
+Back end do projeto Dictionary.
 
 ## Stack utilizada
 Node, NestJS, Postgres
@@ -43,4 +43,24 @@ Inicie o servidor
 Decidi separar o projeto em módulos.
 
 ## Banco de Dados e ORM
-Usei o Typeorm por ser um ORM já consolidado na comunidade Node, e por já utilizar há anos em meus projetos. 
+Usei o DB Postgres, pois é uma DB versátil e me dá a possibilidade de fazer uso das funcionalidades tanto do SQL quanto do NoSQL, além de ter ótimas extensões para diversas funcionalidades.
+
+Usei o Typeorm por ser um ORM já consolidado na comunidade Node.
+
+### Migrations
+no package.json há 3 scripts relacionados a migrations configurados:
+
+migration:create -> Cria uma migration.
+
+Exemplo de uso no Linux:
+
+```
+m=nome_migration npm run migration:create
+```
+
+migration:run -> Executa as migrations
+
+migration:revert -> Reverte a última migration
+
+## Documentação da API
+Usei o Swagger a partir da implementação do próprio NestJS @nestjs/swagger. A lib do Swagger do Nest disponibiliza decorators que agilizam na documentação, então não preciso ficar criando especificações nativas do Swagger, o que agiliza muito no desenvolvimento. Para acessar o swagger, basta acessar http://localhost:3000/docs
