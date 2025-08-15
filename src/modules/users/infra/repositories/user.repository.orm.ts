@@ -14,12 +14,31 @@ export class UserRepositoryOrm implements UserRepositoryPort {
         private readonly userRepository: Repository<UsersOrm>,
     ) { }
 
+    async save(user: User): Promise<User> {
+        const userOrm = this.mapToOrm(user);
+        const userOrmSaved = await this.userRepository.save(userOrm);
+        return this.mapToDomain(userOrmSaved);
+    }
+
     async findByEmail(email: string): Promise<User | null> {
         const userOrm = await this.userRepository.findOne({ where: { email } });
         if (!userOrm) {
             return null;
         }
         return this.mapToDomain(userOrm);
+    }
+
+    private mapToOrm(user: User): UsersOrm {
+        const userOrm = new UsersOrm();
+        userOrm.id = user.id;
+        userOrm.idPublic = user.idPublic;
+        userOrm.name = user.name;
+        userOrm.email = user.email;
+        userOrm.password = user.password;
+        userOrm.createdAt = user.createdAt;
+        userOrm.updatedAt = user.updatedAt;
+        userOrm.deletedAt = user.deletedAt;
+        return userOrm;
     }
 
     private mapToDomain(userOrm: UsersOrm): User {

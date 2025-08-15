@@ -1,5 +1,5 @@
-import { AuthSwagger } from "./signin.swagger";
-import { SigninUsecase } from "src/modules/auth/application/use-cases/signin/signin-usecase";
+import { SigninSwagger } from "./signin.swagger";
+import { SigninUsecase } from "src/modules/auth/application/use-cases/signin-usecase";
 import {
     SigninControllerInputDTO,
     SigninControllerOutputDTO
@@ -14,10 +14,10 @@ export class SigninController {
     constructor(private readonly signinUsecase: SigninUsecase) { }
 
     @Public()
-    @ApiOkResponse(AuthSwagger.ApiSigninOK)
-    @ApiUnauthorizedResponse(AuthSwagger.ApiSigninUnauthorized)
-    @ApiBadRequestResponse(AuthSwagger.ApiSigninBadRequest)
-    @ApiOperation(AuthSwagger.ApiSigninDescription)
+    @ApiOkResponse(SigninSwagger.ApiSigninOK)
+    @ApiUnauthorizedResponse(SigninSwagger.ApiSigninUnauthorized)
+    @ApiBadRequestResponse(SigninSwagger.ApiSigninBadRequest)
+    @ApiOperation(SigninSwagger.ApiSigninDescription)
     @HttpCode(200)
     @Post('signin')
     async signin(

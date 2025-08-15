@@ -1,11 +1,11 @@
-export type SigninInput = {
+export type SignupInput = {
+    name: string;
     email: string;
     password: string;
 }
 
-export type SigninOutput = {
+export type SignupOutput = {
     token: string;
-    expiresIn: number;
     user: {
         id: string //id público
         name: string;

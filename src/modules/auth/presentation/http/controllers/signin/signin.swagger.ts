@@ -1,6 +1,6 @@
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
 
-export namespace AuthSwagger {
+export namespace SigninSwagger {
     export const ApiSigninDescription: ApiOperationOptions = {
         description: 'Endpoint para gerar token de acesso à API',
         summary: 'Realiza login na API',

@@ -1,22 +1,17 @@
 import { IdPublic } from "src/modules/_shared/domain/value-objects/id-public";
 import { Email } from "../value-objects/email";
 
-type UserParams = {
-    id: number;
-    idPublic: IdPublic;
-    name: string;
-    email: Email;
-    password: string;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date | null;
-}
-
 export class User {
-    private constructor(private props: UserParams) { }
+    private constructor(private props: UserProps) { }
 
-    static create(params: UserParams) {
-        return new User(params);
+    static create(params: UserProps) {
+        return new User({
+            id: 0, // Será gerado pelo banco de dados
+            idPublic: params.idPublic,
+            name: params.name,
+            email: params.email,
+            password: params.password
+        });
     }
 
     get id() { return this.props.id; }
@@ -31,5 +26,19 @@ export class User {
 
     get createdAt() { return this.props.createdAt; }
 
+    get updatedAt() { return this.props.updatedAt; }
+
+    get deletedAt() { return this.props.deletedAt; }
+
 }
 
+type UserProps = {
+    id?: number;
+    idPublic: IdPublic;
+    name: string;
+    email: Email;
+    password: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    deletedAt?: Date | null;
+}

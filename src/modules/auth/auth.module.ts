@@ -1,5 +1,5 @@
-import { SigninUsecase } from "./application/use-cases/signin/signin-usecase";
-import { SigninController } from "./presentation/http/controllers/signin/signin.controller";
+import { SigninUsecase, SignupUsecase } from "./application/use-cases";
+import { SigninController, SignupController } from "./presentation/http/controllers";
 import { UserRepositoryOrmModule } from "src/modules/users/infra/repositories/user.repository.orm.module";
 import { Module } from "@nestjs/common";
 
@@ -7,8 +7,8 @@ import { Module } from "@nestjs/common";
     imports: [
         UserRepositoryOrmModule.register(),
     ],
-    controllers: [SigninController],
-    providers: [SigninUsecase],
-    exports: [SigninUsecase],
+    controllers: [SignupController, SigninController],
+    providers: [SignupUsecase, SigninUsecase],
+    exports: [SignupUsecase, SigninUsecase],
 })
 export class AuthModule { }
