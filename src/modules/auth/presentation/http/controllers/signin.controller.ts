@@ -9,10 +9,7 @@ import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnautho
 import { Body, Controller, HttpCode, Post, UnauthorizedException } from "@nestjs/common";
 
 @ApiTags('Auth')
-@Controller({
-    path: '',
-    version: '1',
-})
+@Controller('auth')
 export class SigninController {
     constructor(private readonly signinUsecase: SigninUsecase) { }
 
