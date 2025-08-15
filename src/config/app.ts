@@ -18,12 +18,7 @@ export const configApp = async (): Promise<INestApplication> => {
             transformOptions: { enableImplicitConversion: true },
         }),
     );
-    app.enableVersioning({
-        type: VersioningType.URI,
-        defaultVersion: '1',
-    });
-    app.use(json({ limit: '100mb' }));
-    app.use(urlencoded({ extended: true, limit: '100mb' }));
+    app.use(json({ limit: '1mb' }));
     app.setGlobalPrefix(env.server.prefix);
     app.use(helmet());
     configSwagger(app);
