@@ -11,6 +11,9 @@ import { LogBenchmarkPort } from "src/modules/_shared/application/ports/log-benc
 import { mockUser } from "test/mock/user.mock";
 import { AuthenticatedUser } from "src/modules/_shared/application/contracts/authenticated-user.contract";
 import { env } from "src/config/env";
+import { LoginLogRepositoryPort } from "src/modules/auth/domain/ports";
+import { AUTH_PORT_TOKENS } from "src/modules/auth/domain/ports/tokens";
+import { SigninOutput } from "../../dto/signin.dto";
 
 describe('SigninUsecase', () => {
     let signinUsecase: SigninUsecase;
@@ -19,14 +22,16 @@ describe('SigninUsecase', () => {
     let hash: MockProxy<HashPort>;
     let log: MockProxy<LogPort>;
     let logBenchmark: MockProxy<LogBenchmarkPort>;
+    let loginLogRepository: MockProxy<LoginLogRepositoryPort>;
     const user = mockUser();
 
-    beforeEach(async () => {
+    beforeAll(async () => {
         userRepository = mock<UserRepositoryPort>();
         jwt = mock();
         hash = mock();
         log = mock();
         logBenchmark = mock();
+        loginLogRepository = mock();
 
         const module: TestingModule = await Test.createTestingModule({
             providers: [
@@ -50,6 +55,10 @@ describe('SigninUsecase', () => {
                 {
                     provide: SHARED_PORT_TOKENS.LOG_BENCHMARK,
                     useValue: logBenchmark,
+                },
+                {
+                    provide: AUTH_PORT_TOKENS.LOGIN_LOG_REPOSITORY,
+                    useValue: loginLogRepository,
                 },
             ],
         }).compile();
@@ -88,13 +97,13 @@ describe('SigninUsecase', () => {
         userRepository.findByEmail.mockResolvedValueOnce(user);
         hash.compare.mockResolvedValueOnce(true);
 
-        await signinUsecase.execute({ email: user.email, password: '123456' });
+        const { data } = await signinUsecase.execute({ email: user.email, password: '123456' });
         const params: AuthenticatedUser = {
             id: user.id,
             idPublic: user.idPublic,
             name: user.name,
             email: user.email,
-            loggedAt: new Date(),
+            loggedAt: data?.loggedAt,
         }
         expect(jwt.sign).toHaveBeenCalledWith(params, env.security.jwt.jwtExpiresIn);
         expect(jwt.sign).toHaveBeenCalledTimes(1);
@@ -109,6 +118,14 @@ describe('SigninUsecase', () => {
         expect(result.error).toBe('Senha inválida');
     });
 
+    it('should call the login log repository with the correct user', async () => {
+        userRepository.findByEmail.mockResolvedValueOnce(user);
+        hash.compare.mockResolvedValueOnce(true);
+        await signinUsecase.execute({ email: user.email, password: '123456' });
+        expect(loginLogRepository.save).toHaveBeenCalledWith(user.id);
+        expect(loginLogRepository.save).toHaveBeenCalledTimes(1);
+    });
+
     it('should return the correct data', async () => {
         const token = 'any_token';
         userRepository.findByEmail.mockResolvedValueOnce(user);
@@ -116,13 +133,15 @@ describe('SigninUsecase', () => {
         jwt.sign.mockReturnValueOnce(token as never);
 
         const result = await signinUsecase.execute({ email: user.email, password: '123456' });
-        expect(result.data).toEqual({
+        const response: SigninOutput = {
             token,
             user: {
                 id: user.idPublic,
                 name: user.name,
             },
-        });
+            loggedAt: result.data?.loggedAt,
+        }
+        expect(result.data).toEqual(response);
         expect(result.error).toBeNull();
     });
 });
