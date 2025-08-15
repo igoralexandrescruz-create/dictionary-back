@@ -1,5 +1,5 @@
 import { SigninUsecase } from "./application/use-cases/signin/signin-usecase";
-import { SigninController } from "./presentation/http/controllers/signin.controller";
+import { SigninController } from "./presentation/http/controllers/signin/signin.controller";
 import { UserRepositoryOrmModule } from "src/modules/users/infra/repositories/user.repository.orm.module";
 import { Module } from "@nestjs/common";
 
