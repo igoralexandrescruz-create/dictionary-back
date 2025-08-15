@@ -40,7 +40,7 @@ export class SignupUsecase extends Usecase<SignupInput, SignupOutput> {
         if (errorIdPublic) {
             return {
                 data: null,
-                error: errorIdPublic,
+                error: "Erro ao registrar usuário",
             }
         }
         const { email, error: errorEmail } = Email.create(input.email);
