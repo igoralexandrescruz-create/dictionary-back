@@ -6,7 +6,7 @@ export class User {
 
     static create(params: UserProps) {
         return new User({
-            id: 0, // Será gerado pelo banco de dados
+            id: params.id ?? 0, // Será gerado pelo banco de dados
             idPublic: params.idPublic,
             name: params.name,
             email: params.email,

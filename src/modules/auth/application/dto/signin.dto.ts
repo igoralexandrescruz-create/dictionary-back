@@ -9,4 +9,5 @@ export type SigninOutput = {
         id: string //id público
         name: string;
     }
+    loggedAt: Date;
 }

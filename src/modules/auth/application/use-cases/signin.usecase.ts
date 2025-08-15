@@ -8,6 +8,8 @@ import { HashPort } from "src/modules/_shared/application/ports/hash.port";
 import { AuthenticatedUser } from "src/modules/_shared/application/contracts/authenticated-user.contract";
 import { env } from "src/config/env";
 import { Inject } from "@nestjs/common";
+import { AUTH_PORT_TOKENS } from "../../domain/ports/tokens";
+import { LoginLogRepositoryPort } from "../../domain/ports";
 
 export class SigninUsecase extends Usecase<SigninInput, SigninOutput> {
     constructor(
@@ -17,6 +19,8 @@ export class SigninUsecase extends Usecase<SigninInput, SigninOutput> {
         private readonly jwt: JwtPort,
         @Inject(SHARED_PORT_TOKENS.HASH)
         private readonly hash: HashPort,
+        @Inject(AUTH_PORT_TOKENS.LOGIN_LOG_REPOSITORY)
+        private readonly loginLogRepository: LoginLogRepositoryPort,
     ) {
         super('SigninUsecase', 'V1');
     }
@@ -38,13 +42,17 @@ export class SigninUsecase extends Usecase<SigninInput, SigninOutput> {
             }
         }
 
+        const loggedAt = new Date();
+
         const token = this.jwt.sign<AuthenticatedUser>({
             id: user.id,
             idPublic: user.idPublic,
             name: user.name,
             email: user.email,
-            loggedAt: new Date(),
+            loggedAt,
         }, env.security.jwt.jwtExpiresIn);
+
+        await this.loginLogRepository.save(user.id);
 
         return {
             data: {
@@ -53,6 +61,7 @@ export class SigninUsecase extends Usecase<SigninInput, SigninOutput> {
                     id: user.idPublic,
                     name: user.name,
                 },
+                loggedAt,
             },
             error: null,
         }
