@@ -4,4 +4,5 @@ export const SHARED_PORT_TOKENS = {
     LOG_BENCHMARK: 'LOG_BENCHMARK',
     JWT: 'JWT',
     HASH: 'HASH',
+    GENERATE_ID: 'GENERATE_ID',
 };

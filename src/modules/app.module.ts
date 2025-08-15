@@ -7,6 +7,7 @@ import { LogBenchmarkModule } from './_shared/infra/adapters/log-benchmark/log-b
 import { LogModule } from './_shared/infra/adapters/log/log.module';
 import { CacheModule } from './_shared/infra/adapters/cache/cache.module';
 import { SharedModule } from './_shared/shared.module';
+import { GenerateIdModule } from './_shared/infra/adapters/generate-id/generate-id.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SharedModule } from './_shared/shared.module';
     CacheModule.register(),
     LogModule.register(),
     LogBenchmarkModule.register(),
+    GenerateIdModule.register(),
     SharedModule,
     AuthModule,
   ],
