@@ -23,7 +23,7 @@ describe('SigninUsecase', () => {
     let log: MockProxy<LogPort>;
     let logBenchmark: MockProxy<LogBenchmarkPort>;
     let loginLogRepository: MockProxy<LoginLogRepositoryPort>;
-    const user = mockUser();
+    const user = mockUser({});
 
     beforeAll(async () => {
         userRepository = mock<UserRepositoryPort>();
