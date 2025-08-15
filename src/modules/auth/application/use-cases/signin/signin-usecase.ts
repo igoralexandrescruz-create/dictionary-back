@@ -1,4 +1,4 @@
-import { LoginInput, LoginOutput } from "src/modules/auth/application/dto/login-dto";
+import { SigninInput, SigninOutput } from "src/modules/auth/application/dto/login-dto";
 import { UserRepositoryPort } from "src/modules/users/domain/ports/user.repository.port";
 import { USER_PORT_TOKENS } from "src/modules/users/domain/ports/tokens";
 import { SHARED_PORT_TOKENS } from "src/modules/_shared/application/ports/tokens";
@@ -9,7 +9,7 @@ import { AuthenticatedUser } from "src/modules/_shared/application/contracts/aut
 import { env } from "src/config/env";
 import { Inject } from "@nestjs/common";
 
-export class LoginUsecase extends Usecase<LoginInput, LoginOutput> {
+export class SigninUsecase extends Usecase<SigninInput, SigninOutput> {
     constructor(
         @Inject(USER_PORT_TOKENS.USER_REPOSITORY)
         private readonly userRepository: UserRepositoryPort,
@@ -18,10 +18,10 @@ export class LoginUsecase extends Usecase<LoginInput, LoginOutput> {
         @Inject(SHARED_PORT_TOKENS.HASH)
         private readonly hash: HashPort,
     ) {
-        super('LoginUsecase', 'V1');
+        super('SigninUsecase', 'V1');
     }
 
-    async handleUsecase(input: LoginInput): Promise<Usecase.Response<LoginOutput>> {
+    async handleUsecase(input: SigninInput): Promise<Usecase.Response<SigninOutput>> {
         const user = await this.userRepository.findByEmail(input.email);
         if (!user) {
             return {

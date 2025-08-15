@@ -1,11 +1,11 @@
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
 
 export namespace AuthSwagger {
-    export const ApiLoginDescription: ApiOperationOptions = {
+    export const ApiSigninDescription: ApiOperationOptions = {
         description: 'Endpoint para gerar token de acesso à API',
         summary: 'Realiza login na API',
     };
-    export const ApiLoginOK: ApiResponseOptions = {
+    export const ApiSigninOK: ApiResponseOptions = {
         description: 'Login realizado com sucesso',
         example: {
             statusCode: 200,
@@ -16,7 +16,7 @@ export namespace AuthSwagger {
             }
         }
     };
-    export const ApiLoginUnauthorized: ApiResponseOptions = {
+    export const ApiSigninUnauthorized: ApiResponseOptions = {
         description: 'Login não autorizado',
         example: {
             message: "Login ou senha inválidos",
@@ -24,7 +24,7 @@ export namespace AuthSwagger {
             statusCode: 401
         },
     };
-    export const ApiLoginBadRequest: ApiResponseOptions = {
+    export const ApiSigninBadRequest: ApiResponseOptions = {
         description: 'Requisição inválida',
         example: {
             message: [

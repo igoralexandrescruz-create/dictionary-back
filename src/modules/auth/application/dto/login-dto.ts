@@ -1,11 +1,9 @@
-import { AuthenticatedUser } from "src/modules/_shared/application/contracts/authenticated-user.contract";
-
-export type LoginInput = {
+export type SigninInput = {
     email: string;
     password: string;
 }
 
-export type LoginOutput = {
+export type SigninOutput = {
     token: string;
     expiresIn: number;
     user: {
