@@ -4,6 +4,13 @@ Back end do projeto Dictionary.
 ## Stack utilizada
 Node, NestJS, Postgres
 
+## Arquitetura
+No projeto utilizei a Clean Architeture modularizada de acordo com o domínio.
+
+Em src/modules estão todos os módulos, sendo que o módulo _shared são todos os serviços, contratos ou entidades compartilhadas entre os módulos.
+
+
+
 ## Variáveis de ambiente
 Utilizei o dotenv para carregar as variáveis de ambiente. Para executar o projeto, crie um arquivo .env seguindo a implementação do .env.example 
 Para uso no projeto, as variáveis de ambiente foram centralizadas no arquivo config/env.ts, onde há um objeto "env" estruturado de acordo com o contexto da variável. 
