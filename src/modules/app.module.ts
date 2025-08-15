@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { LogBenchmarkModule } from './_shared/infra/adapters/log-benchmark/log-benchmark.module';
 import { LogModule } from './_shared/infra/adapters/log/log.module';
 import { CacheModule } from './_shared/infra/adapters/cache/cache.module';
+import { SharedModule } from './_shared/shared.module';
 
 @Module({
   imports: [
@@ -15,10 +16,10 @@ import { CacheModule } from './_shared/infra/adapters/cache/cache.module';
     CacheModule.register(),
     LogModule.register(),
     LogBenchmarkModule.register(),
-    AuthModule
+    SharedModule,
+    AuthModule,
   ],
-  controllers: [
-  ],
+  controllers: [],
   providers: [
 
   ],
