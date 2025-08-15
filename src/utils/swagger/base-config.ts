@@ -1,8 +1,8 @@
 import { DocumentBuilder } from "@nestjs/swagger";
 import { env } from "src/config/env";
 
-export const swaggerBase = (version: string, prefix?: string): DocumentBuilder => {
-    const basePath = `${env.server.info.protocol}://${env.server.url}${env.server.reverseProxy ? '' : ':' + String(env.server.port)}/${prefix}`;
+export const swaggerBase = (version: string): DocumentBuilder => {
+    const basePath = `${env.server.info.protocol}://${env.server.url}${env.server.reverseProxy ? '' : ':' + String(env.server.port)}/`;
     return new DocumentBuilder()
         .addSecurity('bearer', {
             type: 'http',

@@ -7,7 +7,7 @@ import { SwaggerModule } from "@nestjs/swagger";
 export const configSwagger = (app: INestApplication) => {
     const docsV1 = SwaggerModule.createDocument(
         app,
-        swaggerBase('1.0', `${env.server.prefix}`).build(),
+        swaggerBase('1.0').build(),
         {
             ignoreGlobalPrefix: true,
             include: [

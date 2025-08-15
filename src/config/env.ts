@@ -3,7 +3,6 @@ export const env = {
     server: {
         port: +process.env.SERVER_PORT || 3000,
         reverseProxy: process.env.REVERSE_PROXY === 'true',
-        prefix: process.env.SERVER_PREFIX || 'api',
         url: process.env.SERVER_URL || 'localhost',
         debug: process.env.DEBUG === 'true',
         info: {

@@ -1,11 +1,10 @@
-import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import cors from 'cors';
-import { json, urlencoded } from 'express';
+import { json } from 'express';
 import express from 'express';
 import { AppModule } from 'src/modules/app.module';
 import helmet from 'helmet';
-import { env } from './env';
 import { join } from 'path';
 import { configSwagger } from './swagger';
 
@@ -19,7 +18,6 @@ export const configApp = async (): Promise<INestApplication> => {
         }),
     );
     app.use(json({ limit: '1mb' }));
-    app.setGlobalPrefix(env.server.prefix);
     app.use(helmet());
     configSwagger(app);
 
