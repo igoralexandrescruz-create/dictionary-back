@@ -10,6 +10,11 @@ import { LogPort } from "src/modules/_shared/application/ports/log-port";
 import { LogBenchmarkPort } from "src/modules/_shared/application/ports/log-benchmark.port";
 import { GenerateIdPort } from "src/modules/_shared/application/ports/generate-id.port";
 import { mockUser } from "test/mock/user.mock";
+import { env } from "src/config/env";
+import { IdPublic } from "src/modules/_shared/domain/value-objects/id-public";
+import { Email } from "src/modules/users/domain/value-objects/email";
+import { User } from "src/modules/users/domain/entities";
+import { AuthenticatedUser } from "src/modules/_shared/application/contracts/authenticated-user.contract";
 
 describe('SignupUsecase', () => {
     let signupUsecase: SignupUsecase;
@@ -19,7 +24,9 @@ describe('SignupUsecase', () => {
     let generateId: MockProxy<GenerateIdPort>;
     let log: MockProxy<LogPort>;
     let logBenchmark: MockProxy<LogBenchmarkPort>;
-    const user = mockUser();
+    const ulid = '01K2QN5003Y7CFE7DY28FRR3DN';
+    const user = mockUser({});
+    const userSaved = mockUser({ id: 1, idPublic: ulid });
 
     beforeAll(async () => {
         userRepository = mock();
@@ -28,6 +35,11 @@ describe('SignupUsecase', () => {
         generateId = mock();
         log = mock();
         logBenchmark = mock();
+        userRepository.findByEmail.mockResolvedValue(null);
+        userRepository.save.mockResolvedValue(userSaved);
+        generateId.execute.mockReturnValue(ulid);
+        hash.hash.mockResolvedValue('123456');
+        jwt.sign.mockReturnValue('any_token');
 
         const module: TestingModule = await Test.createTestingModule({
             providers: [
@@ -66,11 +78,64 @@ describe('SignupUsecase', () => {
         jest.clearAllMocks();
     });
 
-    it('should call the user repository with the correct email', async () => {
-        userRepository.findByEmail.mockResolvedValueOnce(user);
+    it('should call the user repository with the correct params', async () => {
         await signupUsecase.execute({ email: user.email, password: '123456', name: user.name });
         expect(userRepository.findByEmail).toHaveBeenCalledWith(user.email);
         expect(userRepository.findByEmail).toHaveBeenCalledTimes(1);
+    });
 
+    it('should return error if user already exists', async () => {
+        userRepository.findByEmail.mockResolvedValueOnce(user);
+        const result = await signupUsecase.execute({ email: user.email, password: '123456', name: user.name });
+        expect(result.error).toBe('Usuário já cadastrado');
+    });
+
+    it('should return error if id public is invalid', async () => {
+        generateId.execute.mockReturnValueOnce('invalid_id');
+        const result = await signupUsecase.execute({ email: user.email, password: '123456', name: user.name });
+        expect(result.error).toBe('Erro ao registrar usuário');
+    });
+
+    it('should return error if email is invalid', async () => {
+        const result = await signupUsecase.execute({ email: 'invalid_email', password: '123456', name: user.name });
+        expect(result.error).toBe('Email inválido');
+    });
+
+    it('should call the jwt with the correct user', async () => {
+        await signupUsecase.execute({ email: user.email, password: '123456', name: user.name });
+        const params: Omit<AuthenticatedUser, 'loggedAt'> = {
+            id: userSaved.id,
+            idPublic: userSaved.idPublic,
+            name: userSaved.name,
+            email: userSaved.email,
+        }
+
+        expect(jwt.sign).toHaveBeenCalledWith(expect.objectContaining(params), env.security.jwt.jwtExpiresIn);
+        expect(jwt.sign).toHaveBeenCalledTimes(1);
+    });
+
+
+    it('should call the user repository with the correct user', async () => {
+        const password = '123456';
+        await signupUsecase.execute({ email: user.email, password, name: user.name });
+        const userCreated = User.create({
+            idPublic: IdPublic.create(ulid).idPublic,
+            email: Email.create(user.email).email,
+            password,
+            name: user.name,
+        });
+        expect(userRepository.save).toHaveBeenCalledWith(userCreated);
+        expect(userRepository.save).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return the correct data', async () => {
+        const result = await signupUsecase.execute({ email: user.email, password: '123456', name: user.name });
+        expect(result.data).toEqual({
+            token: 'any_token',
+            user: {
+                id: userSaved.idPublic,
+                name: userSaved.name,
+            },
+        });
     });
 });
