@@ -9,7 +9,11 @@ No projeto utilizei a Clean Architeture modularizada de acordo com o domínio.
 
 Em src/modules estão todos os módulos, sendo que o módulo _shared são todos os serviços, contratos ou entidades compartilhadas entre os módulos.
 
-
+Nos módulos, as camadas estão organizadas da seguinte forma:
+domain: Enterprise business rules contendo entidades, ports e VO's
+application: Apllication business rules contendo usecases
+presentation: Interface adapters contendo os controllers
+infra: Framework & Drivers contendo as implementações concretas, entidades da orm, conexão com DB, etc...
 
 ## Variáveis de ambiente
 Utilizei o dotenv para carregar as variáveis de ambiente. Para executar o projeto, crie um arquivo .env seguindo a implementação do .env.example 
