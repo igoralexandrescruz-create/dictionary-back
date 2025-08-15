@@ -1,4 +1,4 @@
-import { SigninInput, SigninOutput } from "src/modules/auth/application/dto/signin-dto";
+import { SigninInput, SigninOutput } from "src/modules/auth/application/dto/signin.dto";
 import { UserRepositoryPort } from "src/modules/users/domain/ports/user.repository.port";
 import { USER_PORT_TOKENS } from "src/modules/users/domain/ports/tokens";
 import { SHARED_PORT_TOKENS } from "src/modules/_shared/application/ports/tokens";

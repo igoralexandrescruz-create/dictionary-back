@@ -1,5 +1,5 @@
 import { SigninSwagger } from "./signin.swagger";
-import { SigninUsecase } from "src/modules/auth/application/use-cases/signin-usecase";
+import { SigninUsecase } from "src/modules/auth/application/use-cases/signin.usecase";
 import {
     SigninControllerInputDTO,
     SigninControllerOutputDTO
