@@ -1,0 +1,3 @@
+export const USER_PORT_TOKENS = {
+    USER_REPOSITORY: 'USER_REPOSITORY',
+}
