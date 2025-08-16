@@ -32,9 +32,15 @@ export class CacheInterceptor implements NestInterceptor {
 
         const request = context.switchToHttp().getRequest<Request>();
         const response = context.switchToHttp().getResponse<Response>();
-        const { key, ttl = 3600 } = cacheOptions;
+        const { key, ttl = 3600, includeUserId = false } = cacheOptions;
 
         const queryParams = request.query as Record<string, any>;
+
+        // Incluir idUser no cache se necessário
+        if (includeUserId && request['user']) {
+            queryParams.userId = request['user'].id;
+        }
+
         const cacheKey = buildCacheKeys(key, queryParams);
 
         try {
