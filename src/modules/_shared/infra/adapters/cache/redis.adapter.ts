@@ -39,17 +39,14 @@ export class RedisAdapter implements OnModuleInit, OnModuleDestroy, CachePort {
     await this.client.quit();
   }
 
-  async get(key: string): Promise<string | null> {
+  async get<T>(key: string): Promise<T | null> {
     const value = await this.client.get(key);
 
-    return value;
+    return value ? JSON.parse(value) : null;
   }
 
   async set(key: string, value: any, ttl?: number): Promise<boolean> {
-    const stringValue =
-      typeof value === 'object' ? JSON.stringify(value) : String(value);
-
-    await this.client.set(key, stringValue, 'EX', ttl || 3600);
+    await this.client.set(key, JSON.stringify(value), 'EX', ttl || 3600);
     return true;
   }
 

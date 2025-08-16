@@ -1,5 +1,5 @@
 export interface CachePort {
-    get(key: string): Promise<string | null>;
+    get<T>(key: string): Promise<T | null>;
     set(key: string, value: any, ttl?: number): Promise<boolean>;
     del(...keys: string[]): Promise<number>;
 }
