@@ -1,1 +1,1 @@
-export * from './users-orm'
+export * from './users.entity.orm'

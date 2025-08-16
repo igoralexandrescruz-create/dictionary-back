@@ -32,5 +32,8 @@ export const env = {
         username: process.env.REDIS_USERNAME || '',
         password: process.env.REDIS_PASSWORD || '',
         db: parseInt(process.env.REDIS_DB, 10) || 0,
+    },
+    cache: {
+        ttl: parseInt(process.env.CACHE_TTL, 10) || 3600,
     }
 };

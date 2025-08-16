@@ -3,6 +3,7 @@ import { AuthModule } from "src/modules/auth/auth.module";
 import { INestApplication } from "@nestjs/common";
 import { SwaggerModule } from "@nestjs/swagger";
 import { SharedModule } from "src/modules/_shared/shared.module";
+import { EntriesModule } from "src/modules/entries/entries.module";
 
 export const configSwagger = (app: INestApplication) => {
     const docsV1 = SwaggerModule.createDocument(
@@ -13,6 +14,7 @@ export const configSwagger = (app: INestApplication) => {
             include: [
                 SharedModule,
                 AuthModule,
+                EntriesModule,
             ]
         });
 

@@ -19,14 +19,11 @@ export class JwtAdapter implements JwtPort {
     // Inicializa o JwtService do NestJS
     this.jwtService = new NestJwtService({
       secret: env.security.jwt.jwtSecret,
-      signOptions: {
-        expiresIn: `${env.security.jwt.jwtExpiresIn}m`
-      },
     });
   }
 
   sign<T>(payload: T, expiresIn: number): string {
-    return this.jwtService.sign(payload as object, { expiresIn });
+    return this.jwtService.sign(payload as object, { expiresIn: `${expiresIn}m` });
   }
 
   verify<T>(token: string): Promise<T | null> {
