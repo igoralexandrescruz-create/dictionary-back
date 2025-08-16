@@ -20,6 +20,13 @@ export class AuthGuard implements CanActivate {
     private readonly jwtService: JwtPort,
   ) { }
 
+  private handleUnauthorized(context: ExecutionContext): boolean {
+    context.switchToHttp().getResponse().status(401).json({
+      message: 'Unauthorized',
+    });
+    return false;
+  }
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
       const { isPublic } = this.getDecorators(context);
@@ -28,17 +35,20 @@ export class AuthGuard implements CanActivate {
 
       const request = context.switchToHttp().getRequest();
       const tokenHeader = this.extractTokenFromHeader(request);
-      if (tokenHeader === undefined) {
-        throw new UnauthorizedException();
+      if (tokenHeader === undefined || !tokenHeader.token) {
+        return this.handleUnauthorized(context);
       }
 
-      const { token } = tokenHeader;
+      const token = await this.handleToken(tokenHeader.token);
+      if (token === null || token === undefined) {
+        return this.handleUnauthorized(context);
+      }
 
-      request['user'] = await this.handleToken(token);
+      request['user'] = token;
 
       return true;
     } catch (error) {
-      throw new UnauthorizedException();
+      return this.handleUnauthorized(context);
     }
   }
 
@@ -51,10 +61,7 @@ export class AuthGuard implements CanActivate {
   }
 
   private async handleToken(token: string): Promise<AuthenticatedUser> {
-    const payload = await this.jwtService.verify<AuthenticatedUser>(token);
-    if (payload === null) throw new UnauthorizedException();
-
-    return payload;
+    return this.jwtService.verify<AuthenticatedUser>(token);
   }
 
   private extractTokenFromHeader(request: Request): TokenHeaderResponse | undefined {
