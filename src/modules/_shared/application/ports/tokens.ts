@@ -5,4 +5,5 @@ export const SHARED_PORT_TOKENS = {
     JWT: 'JWT',
     HASH: 'HASH',
     GENERATE_ID: 'GENERATE_ID',
+    HTTP: 'HTTP',
 };
