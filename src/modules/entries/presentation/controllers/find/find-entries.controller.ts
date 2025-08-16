@@ -19,7 +19,7 @@ export class FindEntriesController {
     @ApiBadRequestResponse(FindEntriesSwagger.ApiFindEntriesBadRequest)
     @ApiOperation(FindEntriesSwagger.ApiFindEntriesDescription)
     @HttpCode(200)
-    @Get('find')
+    @Get('/en')
     async find(
         @Query() params: FindEntriesControllerInputDTO
     ): Promise<FindEntriesControllerOutputDTO> {

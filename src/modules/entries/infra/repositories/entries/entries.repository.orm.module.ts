@@ -1,5 +1,5 @@
 import { EntriesRepositoryOrm } from './entries.repository.orm';
-import { EntryOrm } from 'src/modules/entries/infra/entities';
+import { EntryOrm, FavoritesOrm, HistoryOrm } from 'src/modules/entries/infra/entities';
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ENTRIES_PORT_TOKENS } from 'src/modules/entries/domain/port/tokens';
@@ -16,7 +16,7 @@ export class EntriesRepositoryOrmModule {
 
         return {
             module: EntriesRepositoryOrmModule,
-            imports: [TypeOrmModule.forFeature([EntryOrm])],
+            imports: [TypeOrmModule.forFeature([EntryOrm, FavoritesOrm, HistoryOrm])],
             providers: [EntriesRepositoryOrm, userProvider],
             exports: [userProvider],
         };
